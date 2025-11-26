@@ -1,0 +1,30 @@
+# Photography Directory Structure
+
+Place your photos in the following directories:
+
+```
+public/photos/
+├── portraits/    # Portrait photography
+├── events/       # Event photography
+└── travel/       # Travel photography
+```
+
+## Quick Start
+
+1. Add your photos to the appropriate category folder
+2. Run: `node scripts/generate-photo-index.js`
+3. Copy the generated code into `src/pages/Photography.tsx`
+
+## Supported Formats
+
+- JPG/JPEG
+- PNG
+- WebP
+- GIF
+
+## Recommended Settings
+
+- Max width: 2000px (will be resized by browser)
+- Quality: 85-90%
+- Format: WebP for best compression
+- File naming: lowercase with hyphens (e.g., `golden-hour-portrait.jpg`)
