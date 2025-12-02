@@ -18,6 +18,17 @@ const Photography = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center mb-16"
         >
+          {/* Instagram Handle */}
+          <motion.a
+            href="https://instagram.com/lensbylara"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05 }}
+            className="inline-block mb-6 px-4 py-2 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30 rounded-full text-pink-300 hover:text-pink-200 transition-colors duration-300 text-sm sm:text-base font-medium"
+          >
+            📸 @lensbylara on Instagram
+          </motion.a>
+
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-white mb-6">
             Photography
           </h1>

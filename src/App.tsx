@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import Photography from './pages/Photography';
 import Projects from './pages/Projects';
 import ResumeAbout from './pages/ResumeAbout';
+import './index.css'
+
 
 function AppRoutes() {
   const location = useLocation();

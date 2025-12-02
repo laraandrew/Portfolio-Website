@@ -1,4 +1,4 @@
-export interface Project {
+export type Project = {
   id: string;
   name: string;
   shortDescription: string;
@@ -19,7 +19,7 @@ export const projects: Project[] = [
     techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Mongoose', 'Tailwind CSS', 'AWS'],
     thumbnail: '/images/habit-battles.jpg',
     liveUrl: 'https://habit-battles.com',
-    githubUrl: 'https://github.com/andrew/habit-battles'
+    githubUrl: 'https://github.com/laraandrew/habit-battles'
   },
   {
     id: 'scla-dashboard',

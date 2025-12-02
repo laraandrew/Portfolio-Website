@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Photo } from '../data/photos';
+import type { Photo } from '../data/photos';
 
 interface PhotoGalleryProps {
   photos: Photo[];
