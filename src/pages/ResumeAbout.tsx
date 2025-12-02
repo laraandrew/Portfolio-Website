@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Download } from 'lucide-react';
 
 const ResumeAbout = () => {
   const containerVariants = {
@@ -22,10 +23,11 @@ const ResumeAbout = () => {
     }
   };
 
+  // Reordered with most recent first
   const experiences = [
     {
-      company: 'CommonWheel',
       role: 'Product Manager / Developer',
+      company: 'CommonWheel',
       period: '2023 – 2024',
       bullets: [
         'Led a small cross-functional team in developing collaboration and accountability platform features',
@@ -35,8 +37,8 @@ const ResumeAbout = () => {
       ]
     },
     {
-      company: 'Good2Well',
       role: 'UI/Frontend Developer & Search Feature Lead',
+      company: 'Good2Well',
       period: '2022 – 2023',
       bullets: [
         'Built comprehensive search functionality for web application serving 1000+ users',
@@ -46,8 +48,8 @@ const ResumeAbout = () => {
       ]
     },
     {
-      company: 'KYDS / Code Ninjas',
       role: 'Computer Science Instructor & Robotics Coach',
+      company: 'KYDS / Code Ninjas',
       period: '2021 – 2022',
       bullets: [
         'Taught robotics and computer science fundamentals to K–12 students',
@@ -57,8 +59,8 @@ const ResumeAbout = () => {
       ]
     },
     {
-      company: 'SportsCarLA',
       role: 'Operations & Tech Automation Specialist',
+      company: 'SportsCarLA',
       period: '2020 – 2021',
       bullets: [
         'Organized and digitized vehicle inventory management systems',
@@ -90,11 +92,23 @@ const ResumeAbout = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-white mb-6">
-            Resume / About Me
+            Resume & About Me
           </h1>
+          
+          {/* Download Resume Button */}
+          <motion.a
+            href="/assets/Andrew_Lara_Resume.pdf"
+            download
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-teal-500/25"
+          >
+            <Download size={20} />
+            Download Resume
+          </motion.a>
         </motion.div>
 
         <motion.div
@@ -119,7 +133,7 @@ const ResumeAbout = () => {
                   understand and influence their government without millions of dollars in lobbying, and making it easier 
                   for regular people to learn, grow, and win.
                 </p>
-                <div className="bg-primary-500/10 border-l-4 border-primary-500 pl-6 py-4 rounded-r-lg">
+                <div className="bg-teal-500/10 border-l-4 border-teal-500 pl-6 py-4 rounded-r-lg">
                   <p className="text-gray-200 leading-relaxed italic">
                     Whether it's a habit-tracking app, a civic engagement platform like RepMe, or internal dashboards 
                     that unlock small business efficiency, my work is guided by the same goal: use my skills as a software 
@@ -134,25 +148,27 @@ const ResumeAbout = () => {
           <motion.section variants={itemVariants}>
             <h2 className="text-3xl font-display font-bold text-white mb-8">Experience</h2>
             <div className="space-y-6">
-              {experiences.map((exp, index) => (
+              {experiences.map((exp) => (
                 <motion.div
                   key={exp.company}
                   variants={itemVariants}
-                  className="bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-6"
+                  className="bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-teal-500/30 transition-all duration-300"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl font-display font-semibold text-white">
-                        {exp.company}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-4">
+                    <div className="flex-1">
+                      {/* Position title - now larger and primary */}
+                      <h3 className="text-2xl sm:text-3xl font-display font-bold text-white mb-2">
+                        {exp.role}
                       </h3>
-                      <p className="text-primary-400 font-medium">{exp.role}</p>
+                      {/* Company name - now secondary */}
+                      <p className="text-lg text-teal-400 font-semibold">{exp.company}</p>
                     </div>
-                    <span className="text-gray-400 text-sm mt-2 sm:mt-0">{exp.period}</span>
+                    <span className="text-gray-400 text-sm whitespace-nowrap">{exp.period}</span>
                   </div>
                   <ul className="space-y-2">
                     {exp.bullets.map((bullet, bulletIndex) => (
                       <li key={bulletIndex} className="text-gray-300 leading-relaxed flex items-start">
-                        <span className="text-primary-400 mr-3 mt-2 flex-shrink-0">•</span>
+                        <span className="text-teal-400 mr-3 mt-1 flex-shrink-0">•</span>
                         {bullet}
                       </li>
                     ))}
@@ -170,7 +186,7 @@ const ResumeAbout = () => {
                 <motion.div
                   key={category}
                   variants={itemVariants}
-                  className="bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-6"
+                  className="bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-teal-500/30 transition-all duration-300"
                 >
                   <h3 className="text-lg font-display font-semibold text-white mb-4">
                     {category}
@@ -179,7 +195,7 @@ const ResumeAbout = () => {
                     {skillList.map((skill) => (
                       <span
                         key={skill}
-                        className="px-3 py-1 bg-primary-500/10 text-primary-300 text-sm rounded-full border border-primary-500/20"
+                        className="px-3 py-1 bg-teal-500/10 text-teal-300 text-sm rounded-full border border-teal-500/20 hover:bg-teal-500/20 transition-colors duration-300"
                       >
                         {skill}
                       </span>
@@ -193,27 +209,27 @@ const ResumeAbout = () => {
           {/* Education Section */}
           <motion.section variants={itemVariants}>
             <h2 className="text-3xl font-display font-bold text-white mb-8">Education</h2>
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                <div>
+            <div className="bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-teal-500/30 transition-all duration-300">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-4">
+                <div className="flex-1">
                   <h3 className="text-xl font-display font-semibold text-white">
                     Franklin & Marshall College
                   </h3>
-                  <p className="text-primary-400 font-medium">Bachelor's Degree</p>
+                  <p className="text-lg text-teal-400 font-semibold">Bachelor's Degree</p>
                 </div>
-                <span className="text-gray-400 text-sm mt-2 sm:mt-0">2018 – 2022</span>
+                <span className="text-gray-400 text-sm whitespace-nowrap">2018 – 2022</span>
               </div>
               <ul className="space-y-2">
                 <li className="text-gray-300 leading-relaxed flex items-start">
-                  <span className="text-primary-400 mr-3 mt-2 flex-shrink-0">•</span>
+                  <span className="text-teal-400 mr-3 mt-1 flex-shrink-0">•</span>
                   Double Major: Computer Science & Government
                 </li>
                 <li className="text-gray-300 leading-relaxed flex items-start">
-                  <span className="text-primary-400 mr-3 mt-2 flex-shrink-0">•</span>
+                  <span className="text-teal-400 mr-3 mt-1 flex-shrink-0">•</span>
                   Active in student leadership and technology organizations
                 </li>
                 <li className="text-gray-300 leading-relaxed flex items-start">
-                  <span className="text-primary-400 mr-3 mt-2 flex-shrink-0">•</span>
+                  <span className="text-teal-400 mr-3 mt-1 flex-shrink-0">•</span>
                   Focused on intersection of technology and public policy
                 </li>
               </ul>
@@ -222,7 +238,7 @@ const ResumeAbout = () => {
 
           {/* Contact CTA */}
           <motion.section variants={itemVariants}>
-            <div className="text-center p-8 bg-gradient-to-r from-primary-500/10 to-accent-500/10 rounded-2xl border border-primary-500/20">
+            <div className="text-center p-8 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-2xl border border-teal-500/20">
               <h2 className="text-2xl font-display font-bold text-white mb-4">
                 Let's Connect
               </h2>
@@ -232,7 +248,7 @@ const ResumeAbout = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="mailto:andrew@example.com"
-                  className="inline-flex items-center px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg transition-colors duration-200"
+                  className="inline-flex items-center px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg transition-colors duration-200"
                 >
                   Send Email
                 </a>

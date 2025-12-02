@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+import SplashScreen from './components/SplashScreen';
 import Home from './pages/Home';
 import Photography from './pages/Photography';
 import Projects from './pages/Projects';
@@ -73,8 +75,24 @@ function AppRoutes() {
 }
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    // Check if user has already seen the splash screen in this session
+    const splashShown = sessionStorage.getItem('splashScreenShown');
+    if (splashShown) {
+      setShowSplash(false);
+    }
+  }, []);
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+    sessionStorage.setItem('splashScreenShown', 'true');
+  };
+
   return (
     <Router>
+      <SplashScreen isLoading={showSplash} onLoadingComplete={handleSplashComplete} />
       <div 
         className="min-h-screen bg-gray-950 text-white"
         style={{ 
