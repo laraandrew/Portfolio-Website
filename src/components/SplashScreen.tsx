@@ -1,182 +1,190 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
-interface SplashScreenProps {
+type Props = {
   isLoading: boolean;
   onLoadingComplete: () => void;
-}
+};
 
-const SplashScreen = ({ isLoading, onLoadingComplete }: SplashScreenProps) => {
+export default function SplashScreen({ isLoading, onLoadingComplete }: Props) {
   const [progress, setProgress] = useState(0);
+  const rafId = useRef<number | null>(null);
+  const firedDone = useRef(false);
 
+  // Smooth progress to ~95% while loading
   useEffect(() => {
     if (!isLoading) return;
 
-    // Simulate loading progress
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 90) return prev;
-        return prev + Math.random() * 30;
-      });
-    }, 200);
+    const start = performance.now();
+    const duration = 1600; // ms
+    const ease = (t: number) => 1 - Math.pow(1 - t, 2); // easeOutQuad
 
-    return () => clearInterval(interval);
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const target = 95 * ease(t);
+      setProgress((p) => Math.max(p, target));
+      if (t < 1 && isLoading) {
+        rafId.current = requestAnimationFrame(tick);
+      }
+    };
+
+    rafId.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
   }, [isLoading]);
 
+  // When parent hides loading, let exit animation play then notify once
   useEffect(() => {
-    if (!isLoading && progress < 100) {
-      setProgress(100);
-      // Complete splash screen after progress fills
-      const timer = setTimeout(onLoadingComplete, 600);
+    if (!isLoading && !firedDone.current) {
+      firedDone.current = true;
+      const timer = setTimeout(() => {
+        onLoadingComplete();
+      }, 450); // keep in sync with exit transition
       return () => clearTimeout(timer);
     }
-  }, [isLoading, progress, onLoadingComplete]);
+  }, [isLoading, onLoadingComplete]);
+
+  // Displayed percentage (clamped); when isLoading=false we show 100%
+  const pct = isLoading ? Math.min(100, Math.round(progress)) : 100;
 
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
+          key="splash"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, y: -100, transition: { duration: 0.6, ease: "easeInOut" } }}
-          className="fixed inset-0 z-50 bg-gray-950 flex items-center justify-center overflow-hidden"
+          exit={{ opacity: 0, y: -40, transition: { duration: 0.45, ease: "easeInOut" } }}
+          className="fixed inset-0 z-50 overflow-hidden bg-slate-950"
         >
-          {/* Animated Background Gradient Orbs */}
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-20 left-1/4 w-96 h-96 bg-teal-500/30 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 4, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-20 right-1/4 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl"
-          />
+          {/* subtle vignette */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(88,28,135,0.25),transparent_60%),radial-gradient(1000px_500px_at_80%_110%,rgba(13,148,136,0.18),transparent_60%)]" />
 
-          {/* Main Content */}
-          <div className="relative z-10 flex flex-col items-center justify-center w-full h-full px-4">
-            {/* Logo / Title Area */}
+          {/* floating aurora ribbons */}
+          <Aurora />
+
+          {/* content */}
+          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-6">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-center mb-16"
+              className="text-center"
             >
               <motion.h1
-                animate={{
-                  backgroundImage: [
-                    'linear-gradient(90deg, #14b8a6, #06b6d4)',
-                    'linear-gradient(90deg, #06b6d4, #a855f7)',
-                    'linear-gradient(90deg, #a855f7, #14b8a6)'
-                  ]
-                }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white mb-4"
-                style={{
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundSize: '200% 200%'
-                } as any}
+                className="mb-3 bg-linear-to-r from-teal-300 via-cyan-300 to-violet-300 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl"
+                animate={{ backgroundPositionX: ["0%", "100%"] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                style={{ backgroundSize: "200% 100%" }}
               >
                 Andrew Lara
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-lg sm:text-xl text-gray-300 font-medium"
+                animate={{ opacity: 0.9 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="text-lg font-medium text-slate-300"
               >
                 Software Engineer & Photographer
               </motion.p>
             </motion.div>
 
-            {/* Loading Indicator - Animated Dots */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6, ease: "easeOut" }}
-              className="flex gap-3 mb-12"
-            >
-              {[0, 1, 2].map((i) => (
+            <DotOrbit className="my-10" />
+
+            {/* progress bar */}
+            <div className="mt-2 w-full max-w-sm">
+              <div className="relative h-1.5 overflow-hidden rounded-full bg-slate-800/80">
                 <motion.div
-                  key={i}
-                  animate={{ y: [0, -15, 0] }}
-                  transition={{ duration: 1, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
-                  className="w-3 h-3 bg-gradient-to-r from-teal-400 to-purple-400 rounded-full"
+                  className="absolute inset-y-0 left-0 rounded-full bg-linear-to-r from-teal-400 via-cyan-400 to-fuchsia-400"
+                  animate={{ width: `${pct}%` }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
                 />
-              ))}
-            </motion.div>
-
-            {/* Loading Text */}
-            <motion.p
-              className="text-gray-400 text-sm uppercase tracking-widest mb-8"
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              Loading Experience
-            </motion.p>
-
-            {/* Progress Bar - Desktop Version */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-              className="hidden sm:block w-full max-w-xs"
-            >
-              <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden">
+                {/* shimmer */}
                 <motion.div
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-teal-500 via-purple-500 to-pink-500 rounded-full"
+                  className="absolute inset-y-0 left-0 w-24 -translate-x-full bg-linear-to-r from-transparent via-white/30 to-transparent"
+                  animate={{ x: ["0%", "200%"] }}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
                 />
               </div>
               <motion.p
-                className="text-xs text-gray-500 text-center mt-3 font-medium"
-                animate={{ opacity: [0.6, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
+                className="mt-3 text-center text-xs font-semibold tracking-widest text-slate-400"
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 1.6, repeat: Infinity }}
               >
-                {Math.round(progress)}%
+                {pct}%
               </motion.p>
-            </motion.div>
+            </div>
 
-            {/* Mobile Progress Indicator - Simplified */}
-            <motion.div
-              className="sm:hidden flex items-center gap-2"
-              initial={{ opacity: 0, y: 20 }}
+            <motion.p
+              className="pointer-events-none absolute bottom-10 w-full text-center text-sm italic text-slate-500"
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+              transition={{ delay: 0.8, duration: 0.5 }}
             >
-              <div className="flex gap-1">
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{
-                      backgroundColor: progress > i * 12.5 ? '#14b8a6' : '#374151',
-                      scale: progress > i * 12.5 ? 1.3 : 1
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="w-1 h-1 bg-gray-600 rounded-full"
-                  />
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Inspirational Message */}
-            <motion.div
-              className="absolute bottom-12 left-0 right-0 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-            >
-              <p className="text-gray-500 text-sm italic">
-                Crafting experiences that matter, one pixel at a time
-              </p>
-            </motion.div>
+              Crafting experiences that matter, one pixel at a time
+            </motion.p>
           </div>
         </motion.div>
       )}
     </AnimatePresence>
   );
-};
+}
 
-export default SplashScreen;
+/* ---------- Decorative subcomponents (module scope) ---------- */
+
+function Aurora() {
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      <motion.div
+        className="absolute -left-24 top-1/3 h-72 w-[60%] rounded-full"
+        style={{
+          background:
+            "radial-gradient(60% 100% at 50% 50%, rgba(56,189,248,0.18), transparent 70%)",
+          filter: "blur(40px)",
+        }}
+        animate={{ x: ["0%", "8%", "-6%", "0%"], opacity: [0.5, 0.7, 0.45, 0.5] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute -right-24 top-1/2 h-72 w-[60%] rounded-full"
+        style={{
+          background:
+            "radial-gradient(60% 100% at 50% 50%, rgba(168,85,247,0.16), transparent 70%)",
+          filter: "blur(40px)",
+        }}
+        animate={{ x: ["0%", "-6%", "7%", "0%"], opacity: [0.45, 0.7, 0.5, 0.45] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute left-1/3 -top-16 h-56 w-[40%] rounded-full"
+        style={{
+          background:
+            "radial-gradient(60% 100% at 50% 50%, rgba(20,184,166,0.14), transparent 70%)",
+          filter: "blur(40px)",
+        }}
+        animate={{ y: ["0%", "6%", "-5%", "0%"], opacity: [0.35, 0.55, 0.4, 0.35] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </div>
+  );
+}
+
+function DotOrbit({ className = "" }: { className?: string }) {
+  const dots = [0, 1, 2];
+  return (
+    <div className={`relative h-14 w-28 ${className}`}>
+      {dots.map((d) => (
+        <motion.span
+          key={d}
+          className="absolute left-1/2 top-1/2 block h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-r from-teal-400 to-fuchsia-400 shadow-[0_0_20px_rgba(56,189,248,0.35)]"
+          style={{ transformOrigin: "28px 0px" }}
+          animate={{ rotate: [0, 360], scale: [1, 1.2, 1] }}
+          transition={{
+            rotate: { duration: 2.2 + d * 0.2, repeat: Infinity, ease: "linear" },
+            scale: { duration: 1.4 + d * 0.15, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+      ))}
+    </div>
+  );
+}
