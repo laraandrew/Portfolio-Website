@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 type Props = {
   isLoading: boolean;
@@ -9,22 +9,28 @@ type Props = {
 export default function SplashScreen({ isLoading, onLoadingComplete }: Props) {
   const [progress, setProgress] = useState(0);
   const rafId = useRef<number | null>(null);
-  const firedDone = useRef(false);
+  const done = useRef(false);
 
-  // Smooth progress to ~95% while loading
+  // Smoothly drive progress 0 -> 100 and then finish
   useEffect(() => {
-    if (!isLoading) return;
+    if (!isLoading || done.current) return;
 
     const start = performance.now();
-    const duration = 1600; // ms
-    const ease = (t: number) => 1 - Math.pow(1 - t, 2); // easeOutQuad
+    const duration = 1800; // ms to reach 100
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 2);
 
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
-      const target = 95 * ease(t);
-      setProgress((p) => Math.max(p, target));
-      if (t < 1 && isLoading) {
+      const next = Math.round(100 * easeOut(t));
+      setProgress(next);
+
+      if (t < 1) {
         rafId.current = requestAnimationFrame(tick);
+      } else if (!done.current) {
+        done.current = true;
+        // tiny delay so the last frame paints, then notify parent to unmount
+        const id = setTimeout(onLoadingComplete, 150);
+        return () => clearTimeout(id);
       }
     };
 
@@ -32,106 +38,85 @@ export default function SplashScreen({ isLoading, onLoadingComplete }: Props) {
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [isLoading]);
-
-  // When parent hides loading, let exit animation play then notify once
-  useEffect(() => {
-    if (!isLoading && !firedDone.current) {
-      firedDone.current = true;
-      const timer = setTimeout(() => {
-        onLoadingComplete();
-      }, 450); // keep in sync with exit transition
-      return () => clearTimeout(timer);
-    }
   }, [isLoading, onLoadingComplete]);
 
-  // Displayed percentage (clamped); when isLoading=false we show 100%
-  const pct = isLoading ? Math.min(100, Math.round(progress)) : 100;
+  const pct = Math.min(100, Math.max(0, progress));
 
   return (
-    <AnimatePresence>
-      {isLoading && (
+    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-950">
+      {/* vignette / backdrop */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(88,28,135,0.25),transparent_60%),radial-gradient(1000px_500px_at_80%_110%,rgba(13,148,136,0.18),transparent_60%)]" />
+
+      {/* soft aurora */}
+      <Aurora />
+
+      {/* content */}
+      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-6">
         <motion.div
-          key="splash"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, y: -40, transition: { duration: 0.45, ease: "easeInOut" } }}
-          className="fixed inset-0 z-50 overflow-hidden bg-slate-950"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center"
         >
-          {/* subtle vignette */}
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_-10%,rgba(88,28,135,0.25),transparent_60%),radial-gradient(1000px_500px_at_80%_110%,rgba(13,148,136,0.18),transparent_60%)]" />
-
-          {/* floating aurora ribbons */}
-          <Aurora />
-
-          {/* content */}
-          <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-center"
-            >
-              <motion.h1
-                className="mb-3 bg-linear-to-r from-teal-300 via-cyan-300 to-violet-300 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl"
-                animate={{ backgroundPositionX: ["0%", "100%"] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                style={{ backgroundSize: "200% 100%" }}
-              >
-                Andrew Lara
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.9 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-lg font-medium text-slate-300"
-              >
-                Software Engineer & Photographer
-              </motion.p>
-            </motion.div>
-
-            <DotOrbit className="my-10" />
-
-            {/* progress bar */}
-            <div className="mt-2 w-full max-w-sm">
-              <div className="relative h-1.5 overflow-hidden rounded-full bg-slate-800/80">
-                <motion.div
-                  className="absolute inset-y-0 left-0 rounded-full bg-linear-to-r from-teal-400 via-cyan-400 to-fuchsia-400"
-                  animate={{ width: `${pct}%` }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                />
-                {/* shimmer */}
-                <motion.div
-                  className="absolute inset-y-0 left-0 w-24 -translate-x-full bg-linear-to-r from-transparent via-white/30 to-transparent"
-                  animate={{ x: ["0%", "200%"] }}
-                  transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                />
-              </div>
-              <motion.p
-                className="mt-3 text-center text-xs font-semibold tracking-widest text-slate-400"
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 1.6, repeat: Infinity }}
-              >
-                {pct}%
-              </motion.p>
-            </div>
-
-            <motion.p
-              className="pointer-events-none absolute bottom-10 w-full text-center text-sm italic text-slate-500"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.5 }}
-            >
-              Crafting experiences that matter, one pixel at a time
-            </motion.p>
-          </div>
+          <motion.h1
+            className="mb-3 bg-linear-to-r from-teal-300 via-cyan-300 to-violet-300 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl"
+            animate={{ backgroundPositionX: ["0%", "100%"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+            style={{ backgroundSize: "200% 100%" }}
+          >
+            Andrew Lara
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.9 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-lg font-medium text-slate-300"
+          >
+            Software Engineer & Photographer
+          </motion.p>
         </motion.div>
-      )}
-    </AnimatePresence>
+
+        {/* orbiting dots */}
+        <DotOrbit className="my-10" />
+
+        {/* progress bar */}
+        <div className="mt-2 w-full max-w-sm">
+          <div className="relative h-1.5 overflow-hidden rounded-full bg-slate-800/80">
+            <motion.div
+              className="absolute inset-y-0 left-0 rounded-full bg-linear-to-r from-teal-400 via-cyan-400 to-fuchsia-400"
+              animate={{ width: `${pct}%` }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            />
+            {/* shimmer */}
+            <motion.div
+              className="absolute inset-y-0 left-0 w-24 -translate-x-full bg-linear-to-r from-transparent via-white/30 to-transparent"
+              animate={{ x: ["0%", "200%"] }}
+              transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+          <motion.p
+            className="mt-3 text-center text-xs font-semibold tracking-widest text-slate-400"
+            animate={{ opacity: [0.6, 1, 0.6] }}
+            transition={{ duration: 1.6, repeat: Infinity }}
+          >
+            {pct}%
+          </motion.p>
+        </div>
+
+        <motion.p
+          className="pointer-events-none absolute bottom-10 w-full text-center text-sm italic text-slate-500"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
+          Crafting experiences that matter, one pixel at a time
+        </motion.p>
+      </div>
+    </div>
   );
 }
 
-/* ---------- Decorative subcomponents (module scope) ---------- */
-
+/* decorative pieces (module scope to satisfy eslint rules) */
 function Aurora() {
   return (
     <div className="pointer-events-none absolute inset-0">
