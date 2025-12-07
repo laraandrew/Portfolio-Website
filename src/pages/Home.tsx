@@ -181,20 +181,26 @@ const Home = () => {
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {featuredPhotos.map((photo, index) => (
-                <motion.div
-                  key={photo.id}
-                  variants={cardVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="aspect-square bg-gradient-to-br from-primary-500/20 to-accent-500/20 rounded-xl flex items-center justify-center card-hover border border-white/10"
-                >
-                  <div className="text-3xl opacity-30">📸</div>
-                </motion.div>
-              ))}
-            </div>
+                {featuredPhotos.map((photo, index) => (
+                  <motion.div
+                    key={photo.id}
+                    variants={cardVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="aspect-square overflow-hidden rounded-xl card-hover border border-white/10 bg-gray-900/30"
+                  >
+                    <img
+                      src={photo.src}
+                      alt={photo.alt}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+
           </motion.div>
         </div>
       </section>
