@@ -26,47 +26,43 @@ const ResumeAbout = () => {
   // Reordered with most recent first
   const experiences = [
     {
-      role: 'Product Manager / Developer',
+      role: 'Technical Operations Manager',
+      company: 'SportscarLA',
+      period: 'Jun 2025 – Present',
+      bullets: [
+        'Performed ongoing software updates and modifications to internal systems, improving reliability of pricing workflows by 30%.',
+        'Automated 5+ workflows (sticker gen, cross-platform listings, reply templates) cutting per-vehicle admin steps and improving time-to-list by 67% (Python/Sheets + SOPs).',
+        'Collaborated with operations to align tooling updates with dealership processes and growth goals.'
+      ]
+    },
+    {
+      role: 'Instructor - Robotics & Coding',
+      company: 'Keep Youth Doing Something (KYDS)',
+      period: 'Oct 2024 – May 2025',
+      bullets: [
+        'Delivered 50+ labs on software logic, debugging, and iterative system refinement, increasing engagement by 19%.',
+        'Guided students through identifying and debugging software issues, testing software behavior, and refining system logic through iterative development.',
+        'Created supportive learning environments that connected coding concepts to real-world applications.'
+      ]
+    },
+    {
+      role: 'Research Software Engineer',
+      company: 'North Atlantic Treaty Organization (NATO)',
+      period: 'Aug 2021 – May 2024',
+      bullets: [
+        'Created technical models and diagrams (API flows, schema maps, data pipelines) used by developers during system updates and long-term maintenance.',
+        'Implemented validation scripts and CI checks to enforce API/ETL spec compliance and automate software updates.',
+        'Researched, analyzed, and documented software system behaviors for multinational engineering teams; produced API, schema, and data-pipeline documentation for long-term maintenance.'
+      ]
+    },
+    {
+      role: 'Software Engineer/PM',
       company: 'CommonWheel',
-      period: '2023 – 2024',
+      period: 'Feb 2023 – May 2023',
       bullets: [
-        'Led a small cross-functional team in developing collaboration and accountability platform features',
-        'Set project deadlines and managed product requirements using agile methodologies',
-        'Contributed to UI/UX design using Figma and implemented responsive front-end components',
-        'Increased team collaboration efficiency by 40% through streamlined workflow tools'
-      ]
-    },
-    {
-      role: 'UI/Frontend Developer & Search Feature Lead',
-      company: 'Good2Well',
-      period: '2022 – 2023',
-      bullets: [
-        'Built comprehensive search functionality for web application serving 1000+ users',
-        'Designed and implemented responsive layouts using modern CSS frameworks',
-        'Collaborated with cross-functional team to deliver user-centered design solutions',
-        'Improved user engagement by 35% through intuitive interface improvements'
-      ]
-    },
-    {
-      role: 'Computer Science Instructor & Robotics Coach',
-      company: 'KYDS / Code Ninjas',
-      period: '2021 – 2022',
-      bullets: [
-        'Taught robotics and computer science fundamentals to K–12 students',
-        'Developed curriculum for LEGO robotics, Arduino programming, and basic software development',
-        'Explained complex technical concepts in accessible ways for young learners',
-        'Mentored students in project-based learning and problem-solving methodologies'
-      ]
-    },
-    {
-      role: 'Operations & Tech Automation Specialist',
-      company: 'SportsCarLA',
-      period: '2020 – 2021',
-      bullets: [
-        'Organized and digitized vehicle inventory management systems',
-        'Built internal dashboard to streamline dealership operations and reduce manual processes',
-        'Implemented automated tracking systems that improved operational efficiency by 25%',
-        'Collaborated with team to modernize traditional business processes through technology'
+        'Analyzed user and business needs and translated them into technical specs, models, and acceptance criteria for app development.',
+        'Maintained documentation and decision logs supporting future system updates, debugging, and long-term maintainability.',
+        'Participated in SDLC planning, prioritization, and refinement to ensure changes met functionality, reliability, and security needs.'
       ]
     }
   ];
