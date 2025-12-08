@@ -68,12 +68,50 @@ const ResumeAbout = () => {
   ];
 
   const skills = {
-    'Languages': ['JavaScript', 'TypeScript', 'Python', 'Java', 'C++'],
-    'Frontend': ['React', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'HTML/CSS'],
-    'Backend': ['Node.js', 'Express', 'MongoDB', 'Mongoose', 'PostgreSQL'],
-    'DevOps / Tools': ['Git', 'GitHub', 'AWS (basic)', 'Vercel', 'Render', 'Docker'],
-    'Other': ['Figma', 'Photography', 'Teaching/Instruction', 'Product Management']
-  };
+  Languages: ['JavaScript (ES6+)', 'TypeScript', 'Python', 'Java', 'C++'],
+  
+  Frontend: [
+    'React',
+    'Next.js',
+    'Tailwind CSS',
+    'Framer Motion',
+    'HTML5',
+    'CSS3'
+  ],
+
+  Backend: [
+    'Node.js',
+    'Express',
+    'MongoDB (+ Mongoose)',
+    'PostgreSQL',
+    'REST API Design'
+  ],
+
+  DevOps: [
+    'Docker',
+    'AWS (EC2, S3, Lambda — beginner)',
+    'CI/CD Pipelines',
+    'Vercel',
+    'Render',
+    'Linux'
+  ],
+
+  Tooling: [
+    'Git & GitHub',
+    'VS Code',
+    'Figma',
+    'Postman',
+    'Jest / Vitest (basic)'
+  ],
+
+  Creative: [
+    'Photography',
+    'Visual Composition',
+    'Content Editing',
+    'Brand Storytelling'
+  ]
+};
+
 
   return (
     <motion.div
