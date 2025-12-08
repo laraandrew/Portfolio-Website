@@ -69,7 +69,7 @@ const ResumeAbout = () => {
     {
       role: 'Software Engineer/PM',
       company: 'CommonWheel',
-      period: 'Feb 2023 – May 2023',
+      period: 'Feb 2023 - May 2023',
       bullets: [
         'Analyzed user and business needs and translated them into technical specs, models, and acceptance criteria for app development.',
         'Maintained documentation and decision logs supporting future system updates, debugging, and long-term maintainability.',
@@ -86,7 +86,7 @@ const ResumeAbout = () => {
     'Other': ['Figma', 'Photography', 'Teaching/Instruction', 'Product Management']
   };
 
-  const learningItems = ['Prisma', 'AWS Lambda (deeper)', 'UI/Design Systems'];
+  const learningItems = ['Supabase & MongoDB', 'AWS Lambda (deeper)', 'AI Product Engineering'];
 
   return (
     <motion.div
@@ -260,7 +260,7 @@ const ResumeAbout = () => {
                   </h3>
                   <p className="text-lg text-teal-400 font-semibold">Bachelor's Degree</p>
                 </div>
-                <span className="text-gray-400 text-sm whitespace-nowrap">2018 – 2022</span>
+                <span className="text-gray-400 text-sm whitespace-nowrap">2020 - 2024</span>
               </div>
               <ul className="space-y-2">
                 <li className="text-gray-300 leading-relaxed flex items-start">
