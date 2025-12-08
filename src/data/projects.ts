@@ -18,33 +18,36 @@ export const projects: Project[] = [
     roleOrType: 'Solo project',
     techStack: ['React', 'Node.js', 'Express', 'MongoDB', 'Mongoose', 'Tailwind CSS', 'AWS'],
     thumbnail: '/images/habit-battles.jpg',
-    liveUrl: 'https://habit-battles.com',
-    githubUrl: 'https://github.com/laraandrew/habit-battles'
+    githubUrl: 'https://github.com/laraandrew/Habit-Battles'
   },
   {
     id: 'scla-dashboard',
-    name: 'SCLA Dashboard',
+    name: 'Used Car Dealership Dashboard',
     shortDescription: 'An internal dashboard for a classic car dealership to track inventory, pricing, and operations, replacing spreadsheets with a modern web UI.',
     roleOrType: 'Frontend Developer',
     techStack: ['React', 'TypeScript', 'Chart.js', 'Tailwind CSS', 'REST APIs'],
     thumbnail: '/images/scla-dashboard.jpg',
-    liveUrl: 'https://scla-dashboard.com'
+    githubUrl: 'https://github.com/laraandrew/SCLA-Dashboard'
+
   },
   {
     id: 'commonwheel',
-    name: 'CommonWheel',
+    name: 'PumpHouse Crew',
     shortDescription: 'Led product and front-end efforts for a platform aimed at increasing collaboration and accountability across teams, setting deadlines and workflows.',
-    roleOrType: 'Product Manager / Developer',
+    roleOrType: 'Product Manager / Cloud SWE',
     techStack: ['React', 'TypeScript', 'Figma', 'Node.js', 'PostgreSQL'],
-    thumbnail: '/images/commonwheel.jpg',
-    liveUrl: 'https://commonwheel.com'
+    thumbnail: 'https://thecommonwheel.com/wp-content/uploads/2023/12/new-logo-white.png',
+    liveUrl: 'https://thecommonwheel.com/',
+    githubUrl: 'https://github.com/laraandrew/PumpHouseCrew'
+    
   },
   {
     id: 'nato-project',
     name: 'NATO Project',
     shortDescription: 'Academic/political-tech project related to NATO, exploring policy, governance, and structured information presentation through software.',
-    roleOrType: 'Research & Development',
+    roleOrType: 'Research & Software Development',
     techStack: ['React', 'D3.js', 'Python', 'Data Visualization', 'Government APIs'],
+    liveUrl: 'https://www.fandm.edu/stories/nato-professors-demining-robots.html',
     thumbnail: '/images/nato-project.jpg'
   },
   {
@@ -54,8 +57,8 @@ export const projects: Project[] = [
     roleOrType: 'Lead Developer',
     techStack: ['React Native', 'React', 'Node.js', 'Government APIs', 'MongoDB', 'Civic Tech'],
     thumbnail: '/images/repme.jpg',
-    liveUrl: 'https://repme.app',
-    githubUrl: 'https://github.com/andrew/repme'
+    liveUrl: 'https://repmelanding.vercel.app/',
+    githubUrl: 'https://github.com/laraandrew/RepMeLanding'
   },
   {
     id: 'coming-soon-1',
