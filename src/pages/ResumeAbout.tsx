@@ -243,13 +243,13 @@ const ResumeAbout = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
-                  href="mailto:andrew@example.com"
+                  href="mailto:andrewlara2002@gmail.com"
                   className="inline-flex items-center px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg transition-colors duration-200"
                 >
                   Send Email
                 </a>
                 <a
-                  href="https://linkedin.com/in/andrew-lara"
+                  href="https://linkedin.com/in/laraandrew"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-6 py-3 border border-white/20 hover:bg-white/5 text-white font-semibold rounded-lg transition-colors duration-200"
