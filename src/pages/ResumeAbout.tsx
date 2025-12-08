@@ -23,6 +23,17 @@ const ResumeAbout = () => {
     }
   };
 
+  const bulletVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.4
+      }
+    }
+  };
+
   // Reordered with most recent first
   const experiences = [
     {
@@ -74,6 +85,8 @@ const ResumeAbout = () => {
     'DevOps / Tools': ['Git', 'GitHub', 'AWS (basic)', 'Vercel', 'Render', 'Docker'],
     'Other': ['Figma', 'Photography', 'Teaching/Instruction', 'Product Management']
   };
+
+  const learningItems = ['Prisma', 'AWS Lambda (deeper)', 'UI/Design Systems'];
 
   return (
     <motion.div
@@ -199,6 +212,40 @@ const ResumeAbout = () => {
                   </div>
                 </motion.div>
               ))}
+            </div>
+          </motion.section>
+
+          {/* Learning Section */}
+          <motion.section variants={itemVariants}>
+            <h2 className="text-3xl font-display font-bold text-white mb-8">What I'm Learning Now</h2>
+            <div className="bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-teal-500/30 transition-all duration-300">
+              <motion.ul
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.12 }
+                  }
+                }}
+                className="space-y-3"
+              >
+                {learningItems.map((item) => (
+                  <motion.li
+                    key={item}
+                    variants={bulletVariants}
+                    className="flex items-center text-gray-300"
+                  >
+                    <motion.span
+                      className="w-2.5 h-2.5 rounded-full bg-teal-400 mr-3"
+                      animate={{ scale: [1, 1.25, 1] }}
+                      transition={{ duration: 1.4, repeat: Infinity, repeatType: 'reverse' }}
+                    />
+                    <span className="text-base">{item}</span>
+                  </motion.li>
+                ))}
+              </motion.ul>
             </div>
           </motion.section>
 
